@@ -63,5 +63,11 @@ public class CommentRepository {
 		templete.update(sql, param);
 
 	}
+	
+	public void deleteByArticleId(Integer articleId) {
+		String sql = "delete from comments where article_id = :articleId";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
+		templete.update(sql, param);
+	}
 
 }

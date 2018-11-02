@@ -57,7 +57,7 @@ public class ArticleController {
 	public CommentForm setUpCommentForm() {
 		return new CommentForm();
 	}
-	
+
 	/**
 	 * 処理の起点となるメソッド.
 	 * 
@@ -69,19 +69,18 @@ public class ArticleController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 
-		
 		List<Article> articleList = articleRepository.findAll();
-		//「空」のcommentListをインスタンス化する。
+		// 「空」のcommentListをインスタンス化する。
 		List<Comment> commentList = new ArrayList<>();
-		//ArticleListからarticleを取り出す。
+		// ArticleListからarticleを取り出す。
 		for (Article article : articleList) {
-			//commentList に記事からとってきた記事のIDを入れて取り出す。
+			// commentList に記事からとってきた記事のIDを入れて取り出す。
 			commentList = commentRepository.findByArticleID(article.getId());
-			
-			//articleリストのフィールド変数にあるコメントリストにセットする。
+
+			// articleリストのフィールド変数にあるコメントリストにセットする。
 			article.setCommentList(commentList);
 
-			//以後、jspのforeachの中のforeachでコメント取り出していく。
+			// 以後、jspのforeachの中のforeachでコメント取り出していく。
 		}
 
 		model.addAttribute("articleList", articleList);
@@ -112,11 +111,11 @@ public class ArticleController {
 	 * 
 	 * @param 投稿コメントに入力されたリクエストパラメータ
 	 * @param モデル
-	 * @return　ページ表示、およびDBからのデータ取り出しindexメソッド
+	 * @return ページ表示、およびDBからのデータ取り出しindexメソッド
 	 */
 	@RequestMapping("/insertComment")
-	public String insertComment(CommentForm commentForm,Model model) {
-		Comment comment =  new Comment();
+	public String insertComment(CommentForm commentForm, Model model) {
+		Comment comment = new Comment();
 		comment.setName(commentForm.getName());
 		comment.setContent(commentForm.getContent());
 		comment.setArticleId(commentForm.getArticleId());
@@ -126,8 +125,13 @@ public class ArticleController {
 		return index(model);
 	}
 
-	public String deleteArticle() {
-		return null;
+	@RequestMapping("/delete")
+	public String deleteArticle(Integer articleId, Model model) {
+		commentRepository.deleteByArticleId(articleId);
+		articleRepository.deleteById(articleId);
+		System.out.println(articleId);
+//		commentRepository.deleteByArticleId(comment.getArticleId());
+		return index(model);
 	}
 
 }
