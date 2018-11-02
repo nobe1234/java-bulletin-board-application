@@ -29,7 +29,6 @@
 <dependency>
     <groupId>javax.servlet</groupId>
     <artifactId>jstl</artifactId>
-    <version>1.2</version>
 </dependency>
 	
 	<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
