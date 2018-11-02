@@ -69,12 +69,19 @@ public class ArticleController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 
+		
 		List<Article> articleList = articleRepository.findAll();
+		//「空」のcommentListをインスタンス化する。
 		List<Comment> commentList = new ArrayList<>();
+		//ArticleListからarticleを取り出す。
 		for (Article article : articleList) {
+			//commentList に記事からとってきた記事のIDを入れて取り出す。
 			commentList = commentRepository.findByArticleID(article.getId());
-			 article.setCommentList(commentList);
+			
+			//articleリストのフィールド変数にあるコメントリストにセットする。
+			article.setCommentList(commentList);
 
+			//以後、jspのforeachの中のforeachでコメント取り出していく。
 		}
 
 		model.addAttribute("articleList", articleList);
