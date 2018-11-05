@@ -116,6 +116,7 @@ public class ArticleController {
 	@RequestMapping("/insertComment")
 	public String insertComment(CommentForm commentForm, Model model) {
 		Comment comment = new Comment();
+		//BeanUtilで省略可
 		comment.setName(commentForm.getName());
 		comment.setContent(commentForm.getContent());
 		comment.setArticleId(commentForm.getArticleId());
