@@ -1,6 +1,5 @@
 package jp.co.sample.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,7 @@ public class ArticleController {
 	/**
 	 * 処理の起点となるメソッド.
 	 * 
-	 * DB上の記事とコメントを表示する。
+	 * DB上の記事とコメントを表示する。 投稿された記事には、同記事にIDで紐づいたコメントが新着順で表示される.
 	 * 
 	 * @param モデル
 	 * @return 掲示板
@@ -70,21 +69,8 @@ public class ArticleController {
 	public String index(Model model) {
 
 		List<Article> articleList = articleRepository.findAll();
-		// 「空」のcommentListをインスタンス化する。
-		List<Comment> commentList = new ArrayList<>();
-		// ArticleListからarticleを取り出す。
-		for (Article article : articleList) {
-			// commentList に記事からとってきた記事のIDを入れて取り出す。
-			commentList = commentRepository.findByArticleID(article.getId());
-
-			// articleリストのフィールド変数にあるコメントリストにセットする。
-			article.setCommentList(commentList);
-
-			// 以後、jspのforeachの中のforeachでコメント取り出していく。
-		}
-
 		model.addAttribute("articleList", articleList);
-//		model.addAttribute("commentList", commentList);
+
 		return "bulletinBoard";
 	}
 
@@ -93,9 +79,9 @@ public class ArticleController {
 	 * 
 	 * 投稿欄から送られたリクエストパラメーターをDBに格納する。 DBの内容を表示するため、indexメソッドを呼び出す。
 	 * 
-	 * @param articleForm
-	 * @param model
-	 * @return
+	 * @param 記事投稿フォームに入力されたリクエストパラメータ
+	 * @param モデル
+	 * @return ページ表示、およびDBからのデータ取り出しindexメソッドをリダイレクト.
 	 */
 	@RequestMapping("/insertArticle")
 	public String insertArticle(ArticleForm articleForm, Model model) {
@@ -103,7 +89,7 @@ public class ArticleController {
 		article.setName(articleForm.getName());
 		article.setContent(articleForm.getContent());
 		articleRepository.insert(article);
-		return index(model);
+		return "redirect:/article/index";
 	}
 
 	/**
@@ -111,28 +97,35 @@ public class ArticleController {
 	 * 
 	 * @param 投稿コメントに入力されたリクエストパラメータ
 	 * @param モデル
-	 * @return ページ表示、およびDBからのデータ取り出しindexメソッド
+	 * @return ページ表示、およびDBからのデータ取り出しindexメソッドをリダイレクト.
 	 */
 	@RequestMapping("/insertComment")
 	public String insertComment(CommentForm commentForm, Model model) {
 		Comment comment = new Comment();
-		//BeanUtilで省略可
+		// BeanUtilで省略可
 		comment.setName(commentForm.getName());
 		comment.setContent(commentForm.getContent());
 		comment.setArticleId(commentForm.getArticleId());
 		System.out.println(comment);
 		System.out.println(commentForm);
 		commentRepository.insert(comment);
-		return index(model);
+		return "redirect:/article/index";
 	}
 
+	/**
+	 * 投稿された記事を削除をするメソッド.
+	 * 
+	 * @param 投稿記事id
+	 * @param モデル
+	 * @return ページ表示、およびDBからのデータ取り出しindexメソッドをリダイレクト.
+	 */
 	@RequestMapping("/delete")
 	public String deleteArticle(Integer articleId, Model model) {
 		commentRepository.deleteByArticleId(articleId);
 		articleRepository.deleteById(articleId);
 		System.out.println(articleId);
 //		commentRepository.deleteByArticleId(comment.getArticleId());
-		return index(model);
+		return "redirect:/article/index";
 	}
 
 }

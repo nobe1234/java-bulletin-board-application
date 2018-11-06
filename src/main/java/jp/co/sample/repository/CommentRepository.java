@@ -63,7 +63,14 @@ public class CommentRepository {
 		templete.update(sql, param);
 
 	}
-	
+
+	/**
+	 * 受け取った記事idより、コメントを削除するメソッド.
+	 * 
+	 * 削除された記事コメントをと紐づける。
+	 * 
+	 * @param 記事id
+	 */
 	public void deleteByArticleId(Integer articleId) {
 		String sql = "delete from comments where article_id = :articleId";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);

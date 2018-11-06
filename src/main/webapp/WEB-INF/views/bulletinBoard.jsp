@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+
     
 <!DOCTYPE html>
 <html>
@@ -29,7 +30,7 @@
 <input type="submit" value="記事削除">
 </form:form>
 <!-- コメント一覧 -->
-<c:forEach var="comment" items="${article.commentList}">
+<c:forEach var="comment" items="${aricle.commentList}">
 コメントID:<c:out value="${comment.id }"></c:out><br>
 コメント者名:<c:out value="${comment.name }"></c:out><br>
 コメント内容:<c:out value="${comment.content }"></c:out><br>
