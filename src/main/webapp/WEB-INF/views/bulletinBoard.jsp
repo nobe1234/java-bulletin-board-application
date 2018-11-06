@@ -25,12 +25,12 @@
 投稿者ID:<c:out value="${article.id }"></c:out>
 投稿者名:<c:out value="${article.name}"></c:out><br>
 投稿内容:<c:out value="${article.content}"></c:out><br>
-<form:form modelAttribute="article" action="${pageContext.request.contextPath}/article/delete"> 
+<form:form modelAttribute="articleForm" action="${pageContext.request.contextPath}/article/delete"> 
 <input type="hidden" name="articleId" value="${article.id}">
 <input type="submit" value="記事削除">
 </form:form>
 <!-- コメント一覧 -->
-<c:forEach var="comment" items="${aricle.commentList}">
+<c:forEach var="comment" items="${article.commentList}">
 コメントID:<c:out value="${comment.id }"></c:out><br>
 コメント者名:<c:out value="${comment.name }"></c:out><br>
 コメント内容:<c:out value="${comment.content }"></c:out><br>

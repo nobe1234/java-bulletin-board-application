@@ -39,9 +39,9 @@ public class ArticleRepository {
 	 * @return 全ての投稿記事
 	 */
 	public List<Article> findAll() {
-		String sql = "Select A.id as a_id, a.name as a_name, A.content as a_content,"
+		String sql = "Select a.id as a_id, a.name as a_name, a.content as a_content,"
 				+ " com.id as com_id, com.name as com_name,com.content as com_content,Com.article_id as article_id "
-				+ "From Articles a left outer join comments com on a.id = com.article_id Order by a.id";
+				+ "From articles a LEFT OUTER JOIN comments com on a.id = com.article_id ORDER by a.id";
 		List<Article> articleList = template.query(sql, new ResultSetExtractor<List<Article>>() {
 
 			/** 結果の操作を定義 */
@@ -49,24 +49,30 @@ public class ArticleRepository {
 			public List<Article> extractData(ResultSet rs) throws SQLException, DataAccessException {
 				List<Article> articleList = new ArrayList<>();
 				int previousId = 0;
+				List<Comment> commentList = null;
 				while (rs.next()) {
 					int id = rs.getInt("a_id");
-					List<Comment> commentList = new ArrayList<>();
+					// 新たな投稿idをゲットできた時に記事オブジェクトを作成。
 					if (previousId != id) {
 						Article article = new Article();
 						article.setId(rs.getInt("a_id"));
 						article.setName(rs.getString("a_name"));
+						article.setContent(rs.getString("a_content"));
+						commentList = new ArrayList<>();
 						article.setCommentList(commentList);
 						articleList.add(article);
 					}
-					Comment comment = new Comment();
-					comment.setContent(rs.getString("a_content"));
-					comment.setId(rs.getInt("com_id"));
-					comment.setName(rs.getString("com_name"));
-					comment.setContent(rs.getString("com_content"));
-					comment.setArticleId(rs.getInt("article_id"));
-					commentList.add(comment);
-					previousId = id;
+					// コメントが一件でも投稿されている場合のみadd
+					Integer commentId = rs.getInt("com_id");
+					if (commentId != 0) {
+						Comment comment = new Comment();
+						comment.setId(rs.getInt("com_id"));
+						comment.setName(rs.getString("com_name"));
+						comment.setContent(rs.getString("com_content"));
+						comment.setArticleId(rs.getInt("article_id"));
+						commentList.add(comment);
+						previousId = id;
+					}
 				}
 				return articleList;
 
