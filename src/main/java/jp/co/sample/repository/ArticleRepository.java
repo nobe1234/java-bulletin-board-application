@@ -41,7 +41,7 @@ public class ArticleRepository {
 	public List<Article> findAll() {
 		String sql = "Select a.id as a_id, a.name as a_name, a.content as a_content,"
 				+ " com.id as com_id, com.name as com_name,com.content as com_content,Com.article_id as article_id "
-				+ "From articles a LEFT OUTER JOIN comments com on a.id = com.article_id ORDER by a.id";
+				+ "From articles a LEFT OUTER JOIN comments com on a.id = com.article_id ORDER by a.id desc";
 		List<Article> articleList = template.query(sql, new ResultSetExtractor<List<Article>>() {
 
 			/** 結果の操作を定義 */
@@ -102,10 +102,16 @@ public class ArticleRepository {
 	 * 
 	 * @param 投稿記事のid(主キー)
 	 */
-	public void deleteById(Integer id) {
+//	public void deleteById(Integer id) {
+//		String sql = "delete from articles where id = :id";
+//		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+//		template.update(sql, param);
+//
+//	}
+	public void deleteAll() {
 		String sql = "delete from articles where id = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql, param);
-
+		
 	}
 }

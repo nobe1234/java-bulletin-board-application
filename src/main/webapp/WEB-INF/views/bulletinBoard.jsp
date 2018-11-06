@@ -40,9 +40,13 @@
 <br>
 <!-- コメントフォーム -->
 <form:form modelAttribute="commentForm" action="${pageContext.request.contextPath}/article/insertComment">
-<form:errors path="name" cssStyle="color:red" element="div" ></form:errors>
+<c:if test="${article.id == commentForm.articleId}">
+<form:errors path="name" cssStyle="color:red" element="div" cssClass = "error" ></form:errors>
+</c:if>
 名前:<form:input path="name"/><br>
-<form:errors path="content" cssStyle="color:red" element="div"></form:errors>
+<c:if test="${article.id == commentForm.articleId}">
+<form:errors path="content" cssStyle="color:red" element="div" cssClass = "error"></form:errors>
+</c:if>
 コメント:<form:textarea path="content"/><br>
 <input type="hidden" name="articleId" value="${article.id}">
 <input type="submit" value="コメント投稿">
