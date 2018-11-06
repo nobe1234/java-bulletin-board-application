@@ -133,7 +133,6 @@ public class ArticleController {
 	 */
 	@RequestMapping("/delete")
 	public String deleteArticle(Integer articleId, Model model) {
-		commentRepository.deleteByArticleId(articleId);
 		articleRepository.deleteById(articleId);
 		System.out.println(articleId);
 //		commentRepository.deleteByArticleId(comment.getArticleId());

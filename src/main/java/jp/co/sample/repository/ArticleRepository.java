@@ -108,10 +108,12 @@ public class ArticleRepository {
 //		template.update(sql, param);
 //
 //	}
-	public void deleteAll() {
-		String sql = "delete from articles where id = :id";
+	public void deleteById(Integer id) {
+		String sql = "WITH deleted AS (DELETE FROM articles WHERE id = :id RETURNING id) " + 
+				" DELETE FROM comments WHERE article_id IN (SELECT id FROM deleted);";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql, param);
-		
+
 	}
+
 }
