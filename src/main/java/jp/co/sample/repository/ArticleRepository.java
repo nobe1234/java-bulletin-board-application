@@ -46,14 +46,15 @@ public class ArticleRepository {
 
 			/** 結果の操作を定義 */
 			@Override
+			// ResultSetExtractorは関数型インタフェースのため、引数と実際の処理、戻り値は省略できる。
 			public List<Article> extractData(ResultSet rs) throws SQLException, DataAccessException {
 				List<Article> articleList = new ArrayList<>();
-				int previousId = 0;
+				int previousArticleId = 0;
 				List<Comment> commentList = null;
 				while (rs.next()) {
-					int id = rs.getInt("a_id");
+					int nowArticleId = rs.getInt("a_id");
 					// 新たな投稿idをゲットできた時に記事オブジェクトを作成。
-					if (previousId != id) {
+					if (previousArticleId != nowArticleId) {
 						Article article = new Article();
 						article.setId(rs.getInt("a_id"));
 						article.setName(rs.getString("a_name"));
@@ -71,8 +72,8 @@ public class ArticleRepository {
 						comment.setContent(rs.getString("com_content"));
 						comment.setArticleId(rs.getInt("article_id"));
 						commentList.add(comment);
-						previousId = id;
 					}
+					previousArticleId = nowArticleId;
 				}
 				return articleList;
 
@@ -96,6 +97,8 @@ public class ArticleRepository {
 
 	/**
 	 * 記事をDBから削除するメソッド.
+	 * 
+	 * 
 	 * 
 	 * @param 投稿記事のid(主キー)
 	 */
